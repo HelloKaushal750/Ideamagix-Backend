@@ -7,6 +7,16 @@ const { CourseModel } = require("../models/course.model");
 const { LectureModel } = require("../models/lecture.model");
 const { UserModel } = require("../models/user.model");
 
+AdminController.get("/showlecture/:courseId", async (req, res) => {
+  try {
+    const { courseId } = req.params;
+    const allLecture = await LectureModel.find({ course: courseId });
+    console.log(allLecture);
+    res.status(200).json(allLecture);
+  } catch (error) {
+    res.status(404).json({ message: error });
+  }
+});
 
 AdminController.get("/showInstructor", async (req, res) => {
   try {
