@@ -16,6 +16,7 @@ AdminController.get("/showInstructor",async (req,res)=>{
     }
 })
 
+
 AdminController.get("/showCourse",async(req,res)=>{
     try {
         const allCourse = await CourseModel.find();
