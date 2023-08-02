@@ -7,24 +7,34 @@ const { CourseModel } = require("../models/course.model");
 const { LectureModel } = require("../models/lecture.model");
 const { UserModel } = require("../models/user.model");
 
-AdminController.get("/showInstructor",async (req,res)=>{
-    try {
-        const allInstructor = await UserModel.find({category:"Instructor"});
-        res.status(200).json(allInstructor)
-    } catch (error) {
-        res.status(404).json(error)
-    }
-})
+AdminController.get("/:courseId", async (req, res) => {
+  try {
+    const { courseId } = req.params;
+    const allLecture = await LectureModel.find({ course: courseId });
+    // console.log(allLecture);
+    res.status(200).json(allLecture);
+  } catch (error) {
+    res.status(404).json({ message: error });
+  }
+});
 
+AdminController.get("/showInstructor", async (req, res) => {
+  try {
+    const allInstructor = await UserModel.find({ category: "Instructor" });
+    res.status(200).json(allInstructor);
+  } catch (error) {
+    res.status(404).json(error);
+  }
+});
 
-AdminController.get("/showCourse",async(req,res)=>{
-    try {
-        const allCourse = await CourseModel.find();
-        res.status(200).json(allCourse)
-    } catch (error) {
-        res.status(404).json(error)
-    }
-})
+AdminController.get("/showCourse", async (req, res) => {
+  try {
+    const allCourse = await CourseModel.find();
+    res.status(200).json(allCourse);
+  } catch (error) {
+    res.status(404).json(error);
+  }
+});
 
 AdminController.post("/addcourse", async (req, res) => {
   try {
@@ -58,10 +68,10 @@ AdminController.post("/addlecture/:courseId", async (req, res) => {
 
     const checkLecture = await LectureModel.find({ date });
     console.log(checkLecture);
-    if (checkLecture.length>0) {
+    if (checkLecture.length > 0) {
       const objectIdInstance = new ObjectId(checkLecture[0].instructor);
       const instructorString = objectIdInstance.toString();
-    
+
       const courseInstance = new ObjectId(checkLecture[0].course);
       const courseString = courseInstance.toString();
 
@@ -87,6 +97,5 @@ AdminController.post("/addlecture/:courseId", async (req, res) => {
     console.log(error);
   }
 });
-
 
 module.exports = { AdminController };
